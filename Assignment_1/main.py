@@ -106,3 +106,29 @@ class SandwichMachine:
         self.machine_resources['cheese'] -= order_ingredients['cheese']
 
 ### Make an instance of SandwichMachine class and write the rest of the codes ###
+
+
+maker = SandwichMachine(resources)
+while True:
+    response = input("What would you like? (small/ medium/ large/ off/ report): ")
+
+    if response == "off":
+        break
+
+    elif response == "report":
+        print(f'Bread: {maker.machine_resources["bread"]} slice (s)')
+        print(f'Ham: {maker.machine_resources["ham"]} slice (s)')
+        print(f'Cheese: {maker.machine_resources["cheese"]} pounds (s)')
+
+    else:
+        check_ingredients = maker.check_resources(recipes[response]['ingredients'])
+        if not check_ingredients:
+            continue
+
+        else:
+            print('Please insert coins.')
+            coins_inserted = maker.process_coins()
+
+            if maker.transaction_result(coins_inserted, recipes[response]['cost']):
+                maker.make_sandwich(response, recipes[response]['ingredients'])
+                print(f'{response} sandwich is ready. Bon appeti!')
