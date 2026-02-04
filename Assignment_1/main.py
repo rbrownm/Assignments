@@ -101,4 +101,8 @@ class SandwichMachine:
         """Deduct the required ingredients from the resources.
            Hint: no output"""
 
+        self.machine_resources['bread'] -= order_ingredients['bread']
+        self.machine_resources['ham'] -= order_ingredients['ham']
+        self.machine_resources['cheese'] -= order_ingredients['cheese']
+
 ### Make an instance of SandwichMachine class and write the rest of the codes ###
