@@ -28,6 +28,13 @@ def update(db: Session, order_details_id, order_details):
     db.commit()
     return db_order_detail.first()
 
+def delete(db: Session, order_detail_id: int):
+    db_order_details = db.query(models.OrderDetail).filter(models.OrderDetail.id == order_detail_id)
+    db_order_details.delete(synchronize_session=False)
+    db.commit()
+    return Response(status_code=status.HTTP_204_NO_CONTENT)
+
+
 
 
 
