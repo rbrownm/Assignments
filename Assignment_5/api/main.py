@@ -97,6 +97,15 @@ def delete_one_sandwich(sandwich_id: int, db: Session = Depends(get_db)):
 def create_order_details(order_detail: schemas.OrderDetailCreate, db: Session = Depends(get_db)):
     return order_details.create(db=db, order_details=order_detail)
 
-@app.get("/order_details", response_model=list[schemas.OrderDetail], tags=["Order details"])
+@app.get("/order_details/", response_model=list[schemas.OrderDetail], tags=["Order details"])
 def read_order_details(db: Session = Depends(get_db)):
     return order_details.read_all(db)
+
+
+@app.get("/order_details/", response_model=list[schemas.OrderDetail], tags=["Order details"])
+def read_one_order_details(order_detail_id: int, db: Session = Depends(get_db)):
+    order_detail = order_details.read_one(db, order_detail_id=order_detail_id)
+    if order_detail is None:
+        raise HTTPException(status_code=404, detail="User not found")
+    return order_detail
+
