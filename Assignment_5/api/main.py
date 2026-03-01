@@ -75,7 +75,7 @@ def read_one_sandwich(sandwich_id: int, db: Session = Depends(get_db)):
     return sandwich
 
 
-@app.put("/sandwiches/{sandwich_id}", response_model=schemas.Order, tags=["Sandwiches"])
+@app.put("/sandwiches/{sandwich_id}", response_model=schemas.Sandwich, tags=["Sandwiches"])
 def update_one_sandwich(sandwich_id: int, sandwich: schemas.SandwichUpdate, db: Session = Depends(get_db)):
     sandwich_db = sandwiches.read_one(db, sandwich_id=sandwich_id)
     if sandwich_db is None:
@@ -102,10 +102,26 @@ def read_order_details(db: Session = Depends(get_db)):
     return order_details.read_all(db)
 
 
-@app.get("/order_details/", response_model=list[schemas.OrderDetail], tags=["Order details"])
+@app.get("/order_details/{order_detail_id}", response_model=schemas.OrderDetail, tags=["Order details"])
 def read_one_order_details(order_detail_id: int, db: Session = Depends(get_db)):
     order_detail = order_details.read_one(db, order_detail_id=order_detail_id)
     if order_detail is None:
         raise HTTPException(status_code=404, detail="User not found")
     return order_detail
+
+@app.put("/order_details/{order_detail_id}", response_model=schemas.OrderDetail, tags=["Order details"])
+def update_one_order_detail(order_detail_id: int, order_detail: schemas.OrderDetailUpdate, db: Session = Depends(get_db)):
+    order_details_db = order_details.read_one(db, order_detail_id=order_detail_id)
+    if order_details_db is None:
+        raise HTTPException(status_code=404, detail="User not found")
+    return order_details.update(db=db, order_detail=order_detail, order_detail_id= order_detail_id)
+
+
+
+@app.delete("/order_details/{order_detail_id}", tags=["Order Details"])
+def delete_one_order_detail(order_detail_id: int, db: Session = Depends(get_db)):
+    order_detail = order_details.read_one(db, order_detail_id= order_detail_id)
+    if order_detail is None:
+        raise HTTPException(status_code=404, detail="User not found")
+    return order_details.delete(db=db, order_detail_id=order_detail_id)
 
